@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lelop Search Engine</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #f8f9fa;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .search-container {
+            text-align: center;
+            width: 90%;
+            max-width: 600px;
+        }
+        .logo {
+            font-size: 3.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .logo span {
+            display: inline-block;
+        }
+        .logo .l1 {
+            color: #4285f4; /* Blue */
+        }
+        .logo .e {
+            color: #ea4335; /* Red */
+        }
+        .logo .l2 {
+            color: #fbbc05; /* Yellow */
+        }
+        .logo .o {
+            color: #34a853; /* Green */
+        }
+        .logo .p {
+            color: #ea4335; /* Red */
+        }
+        .search-box {
+            display: flex;
+            align-items: center;
+            border: 1px solid #ddd;
+            border-radius: 50px;
+            padding: 10px;
+            background: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .search-input {
+            flex-grow: 1;
+            border: none;
+            outline: none;
+            padding: 10px;
+            font-size: 1rem;
+            color: #333;
+            border-radius: 50px;
+            background-color: transparent;
+        }
+        .search-input::placeholder {
+            color: #aaa;
+        }
+        .mic-button {
+            background-color: transparent;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        .mic-button img {
+            width: 32px;
+            height: 32px;
+        }
+    </style>
+</head>
+<body>
+    <div class="search-container">
+        <div class="logo">
+            <span class="l1">L</span>
+            <span class="e">e</span>
+            <span class="l2">l</span>
+            <span class="o">o</span>
+            <span class="p">p</span>
+        </div>
+        <form class="search-box" onsubmit="performSearch(event)">
+            <input type="text" id="search-query" class="search-input" placeholder="Search in Lelop" required>
+            <button type="button" class="mic-button" onclick="startDictation()">
+                <img src="https://cdn1.iconfinder.com/data/icons/google-s-logo/150/Google_Icons-25-1024.png" alt="Microphone Icon">
+            </button>
+        </form>
+    </div>
+
+    <script>
+        function performSearch(event) {
+            event.preventDefault();
+            const query = document.getElementById('search-query').value.trim();
+            if (query) {
+                const searchUrl = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
+                window.location.href = searchUrl; // Redirect to Google search results
+            } else {
+                alert('Please enter a search query.');
+            }
+        }
+
+        async function startDictation() {
+            const languages = ['en-US', 'ar-SA']; // List of languages to test
+            let recognizedText = '';
+
+            for (const lang of languages) {
+                const result = await recognizeSpeech(lang);
+                if (result) {
+                    recognizedText = result;
+                    break;
+                }
+            }
+
+            if (recognizedText) {
+                document.getElementById('search-query').value = recognizedText;
+                performSearch(new Event('submit'));
+            } else {
+                alert('Could not recognize speech. Please try again.');
+            }
+        }
+
+        function recognizeSpeech(language) {
+            return new Promise((resolve) => {
+                const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+                recognition.lang = language;
+                recognition.start();
+
+                recognition.onresult = function(event) {
+                    const transcript = event.results[0][0].transcript;
+                    resolve(transcript); // Return recognized text
+                };
+
+                recognition.onerror = function(event) {
+                    console.error(`Error in ${language}:`, event.error);
+                    resolve(null); // Return null on error
+                };
+
+                recognition.onend = function() {
+                    console.log(`Finished recognition for ${language}`);
+                };
+            });
+        }
+    </script>
+</body>
+</html>

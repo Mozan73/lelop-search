@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lelop Search Engine</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #f8f9fa;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .search-container {
+            text-align: center;
+            width: 90%;
+            max-width: 600px;
+        }
+        .logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .logo span {
+            display: inline-block;
+        }
+        .logo .l1 {
+            color: #4285f4; /* Blue */
+        }
+        .logo .e {
+            color: #ea4335; /* Red */
+        }
+        .logo .l2 {
+            color: #fbbc05; /* Yellow */
+        }
+        .logo .o {
+            color: #34a853; /* Green */
+        }
+        .logo .p {
+            color: #ea4335; /* Red */
+        }
+        .search-box {
+            display: flex;
+            align-items: center;
+            border: 1px solid #ddd;
+            border-radius: 50px;
+            padding: 10px;
+            background: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .search-input {
+            flex-grow: 1;
+            border: none;
+            outline: none;
+            padding: 10px;
+            font-size: 1rem;
+            color: #333;
+            border-radius: 50px;
+            background-color: transparent;
+        }
+        .search-input::placeholder {
+            color: #aaa;
+        }
+        .search-button {
+            background-color: #4285f4;
+            border: none;
+            border-radius: 50px;
+            color: white;
+            padding: 10px 20px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .search-button:hover {
+            background-color: #3367d6;
+        }
+        footer {
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: #777;
+        }
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 2rem;
+            }
+            .search-box {
+                flex-direction: column;
+            }
+            .search-input {
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="search-container">
+        <div class="logo">
+            <span class="l1">L</span>
+            <span class="e">e</span>
+            <span class="l2">l</span>
+            <span class="o">o</span>
+            <span class="p">p</span>
+        </div>
+        <form class="search-box" onsubmit="performSearch(event)">
+            <input type="text" class="search-input" placeholder="Search in Lelop or use URL" required>
+            <button type="submit" class="search-button">Search</button>
+        </form>
+    </div>
+    <footer>Powered by Lelop</footer>
+
+    <script>
+        function performSearch(event) {
+            event.preventDefault();
+            const query = document.querySelector('.search-input').value.trim();
+            if (query) {
+                if (query.startsWith('http://') || query.startsWith('https://')) {
+                    window.location.href = query;
+                } else {
+                    window.location.href = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
+                }
+            } else {
+                alert('Please enter a search query or URL.');
+            }
+        }
+    </script>
+</body>
+</html>
